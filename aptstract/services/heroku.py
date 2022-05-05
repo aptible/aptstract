@@ -23,3 +23,5 @@ def get_backup(application: str, database: str = None):
     download_results = subprocess_stream(download_command, stdout=subprocess.PIPE)
     if download_results["returncode"] != 0:
         raise Exception("Unable to download backup.")
+
+    return save_path

@@ -9,12 +9,13 @@ import typer
 from ..paths import APTIBLE_CLI_PATH
 from ..streamrun import subprocess_stream
 
-# These are the keys we need to extract from the
+# These are the keys we need to extract from the Aptible CLI.
 db_config = ["host", "port", "username", "password", "database"]
 
 
 @contextlib.contextmanager
 def database_tunnel(database: str):
+    typer.echo("Opening secure tunnel to Aptible Database.")
     results = subprocess_stream(
         [APTIBLE_CLI_PATH, "db:tunnel", database],
         "Connected. Ctrl-C to close connection.",
@@ -26,7 +27,7 @@ def database_tunnel(database: str):
         typer.echo("Unable to establish tunnel.")
         sys.exit(1)
 
-    typer.echo("Tunnel Established.")
+    typer.echo("Aptible Database Tunnel Established.")
 
     config = {}
     for line in results["stderr"].splitlines():
@@ -36,7 +37,9 @@ def database_tunnel(database: str):
 
     yield config
 
-    typer.echo("Closing Tunnel.")
+    typer.echo("Closing Database Tunnel.")
+    # Let it close nicely.
     results["process"].send_signal(signal.SIGINT)
     time.sleep(5)
+    # Force it to close.
     results["process"].kill()

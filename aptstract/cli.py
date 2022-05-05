@@ -9,6 +9,22 @@ app = typer.Typer()
 
 
 @app.command()
+def migrate():
+
+    heroku_application = typer.prompt("What is the name of the Heroku application?")
+    heroku_database = None
+    if typer.confirm("Is there more than one database in the application?"):
+        heroku_database = typer.prompt("Which database should be moved?")
+    aptible_database = typer.prompt("What is the name of the Aptible database to restore to?")
+
+    backup_path = heroku.get_backup(heroku_application, heroku_database)
+    with aptible.database_tunnel(aptible_database) as config:
+        typer.echo("Restoring backup.")
+        postgres.restore(config, Path(backup_path))
+        typer.echo(f"Backup successfully migrated to {aptible_database}.")
+
+
+@app.command()
 def fetch_database(application: str, database: str = None):
     heroku.get_backup(application, database)
 
