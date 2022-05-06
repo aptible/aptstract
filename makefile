@@ -5,6 +5,9 @@ export BUNDLE_DIRECTORY := $(shell pwd)/bundles
 install: .venv
 	$(PYTHON) -m pip install -e .[dev]
 
+build: install
+	python -m build --wheel
+
 .venv:
 	python -m venv .venv
 
