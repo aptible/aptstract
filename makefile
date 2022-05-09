@@ -34,3 +34,17 @@ isort_check:
 
 black_check:
 	$(PYTHON) -m black . --check
+
+
+pex:
+	$(PYTHON) -m pex . --python-shebang="#!/usr/bin/env python3" --console-script aptstract -v -o aptstract.pex --disable-cache
+
+pex_debug: pex
+	rm -Rf temp || true
+	mkdir temp
+	cp aptstract.pex temp/aptstract.pex
+	cd temp && unzip aptstract.pex
+
+clean:
+	rm -Rf temp || true
+	rm -Rf .venv || true

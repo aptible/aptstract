@@ -162,3 +162,4 @@ cython_debug/
 # We don't want to accidentally submodule a repo, but we want to keep the path.
 backups/*
 !/backups/.gitkeep
+temp/
