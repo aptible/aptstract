@@ -2,6 +2,8 @@ from pathlib import Path
 
 import typer
 
+from paths import get_utility_path
+
 from .engines import postgres
 from .services import aptible, heroku
 
@@ -10,6 +12,11 @@ app = typer.Typer()
 
 @app.command()
 def migrate():
+    # Call these to trigger errors earlier in the process.
+    # This will get replaced with more dynamic logic when more services are added.
+    get_utility_path("heroku")
+    get_utility_path("aptible")
+    get_utility_path("pg_restore")
 
     heroku_application = typer.prompt("What is the name of the Heroku application?")
     heroku_database = None

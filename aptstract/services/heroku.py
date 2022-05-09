@@ -1,11 +1,12 @@
 import subprocess
 from collections.abc import Callable
 
-from ..paths import HEROKU_CLI_PATH
+from ..paths import get_utility_path
 from ..streamrun import subprocess_stream
 
 
 def get_backup(application: str, database: str = None):
+    HEROKU_CLI_PATH = get_utility_path("heroku")
     backup_command = [HEROKU_CLI_PATH, "pg:backups:capture", "--app", application]
     if database:
         backup_command.append(database)
