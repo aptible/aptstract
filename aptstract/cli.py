@@ -2,9 +2,8 @@ from pathlib import Path
 
 import typer
 
-from paths import get_utility_path
-
 from .engines import postgres
+from .paths import get_utility_path
 from .services import aptible, heroku
 
 app = typer.Typer()
