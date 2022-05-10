@@ -6,7 +6,7 @@ import time
 
 import typer
 
-from ..paths import APTIBLE_CLI_PATH
+from ..paths import get_utility_path
 from ..streamrun import subprocess_stream
 
 # These are the keys we need to extract from the Aptible CLI.
@@ -15,6 +15,7 @@ db_config = ["host", "port", "username", "password", "database"]
 
 @contextlib.contextmanager
 def database_tunnel(database: str):
+    APTIBLE_CLI_PATH = get_utility_path("aptible")
     typer.echo("Opening secure tunnel to Aptible Database.")
     results = subprocess_stream(
         [APTIBLE_CLI_PATH, "db:tunnel", database],
